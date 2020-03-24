@@ -32,7 +32,6 @@ public class PlayerMovementController : MonoBehaviour {
     /// <summary>
     /// This function is called every fixed framerate frame, if the MonoBehaviour is enabled.
     /// </summary>
-    /// <returns>void</returns>
     void FixedUpdate() {
         MovePlayerByInput();
     }
@@ -43,7 +42,6 @@ public class PlayerMovementController : MonoBehaviour {
     /// This method must be called from 
     /// Update.
     /// </summary>
-    /// <returns>void</returns>
     private void UpdateAnimationState() {
 
         // check for east movement animation.
@@ -77,7 +75,6 @@ public class PlayerMovementController : MonoBehaviour {
     /// in user input. This method must be
     /// called from FixedUpdate.
     /// </summary>
-    /// <returns>void</returns>
     private void MovePlayerByInput() {
 
         // read input from keyboard.
@@ -94,7 +91,6 @@ public class PlayerMovementController : MonoBehaviour {
     /// <summary>
     /// Init class method.
     /// </summary>
-    /// <returns>void</returns>
     private void Init() {
         
         // get rigibody 2D component.
