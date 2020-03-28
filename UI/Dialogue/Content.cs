@@ -100,6 +100,16 @@ public class Content : MonoBehaviour {
     }
 
     /// <summary>
+    /// Reset component to
+    /// initial status.
+    /// </summary>
+    public void Reset() {
+        this.displayingText = false;
+        content.text = "";
+        HideTextArrow();
+    }
+
+    /// <summary>
     /// Init class method.
     /// </summary>
     private void Init() {

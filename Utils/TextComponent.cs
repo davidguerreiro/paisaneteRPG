@@ -30,6 +30,14 @@ public class TextComponent : MonoBehaviour {
     }
 
     /// <summary>
+    /// Update text colour.
+    /// </summary>
+    /// <param name="colour">color - Colour to apply to the text</param>
+    public void UpdateColour( Color colour ) {
+        content.color = colour;
+    }
+
+    /// <summary>
     /// Init class method.
     /// </summary>
     public void Init() {

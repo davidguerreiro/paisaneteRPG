@@ -22,6 +22,14 @@ public class AnimationComponent : MonoBehaviour {
     }
 
     /// <summary>
+    /// Update displayed flag.
+    /// </summary>
+    /// <param name="newValue">bool - new displayed value.false</param>
+    public void UpdateDisplayed( bool newValue ) {
+        this.displayed = newValue;
+    }
+
+    /// <summary>
     /// Display element.
     /// </summary>
     public void Display() {
