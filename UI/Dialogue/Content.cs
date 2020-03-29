@@ -81,6 +81,8 @@ public class Content : MonoBehaviour {
 
             yield return new WaitForSeconds( speed );
 
+            i++;
+
             if ( i == characters.Length ) {
                 this.displayingText = false;
             }

@@ -9,15 +9,18 @@ public class StaticDialogue : MonoBehaviour {
     public string[] paragraphs;                         // Dialogue paragraphs.
     private int counter;                                // Counter used to check which paragraph needs to be displayed.
     private bool playerColliding;                       // True if the player is colliding with the object that displays this dialoge.
+    private AudioComponent audioComponent;              // Audio component reference.
 
     // Start is called before the first frame update
     void Start() {
         Init();
     }
 
-    // Update is called once per frame
-    void Update() {
-        
+    /// <summary>
+    /// This function is called every fixed framerate frame, if the MonoBehaviour is enabled.
+    /// </summary>
+    void FixedUpdate() {
+        ListenForPlayerInput();
     }
 
     /// <summary>
@@ -29,6 +32,9 @@ public class StaticDialogue : MonoBehaviour {
 
         // check if this is the first paragraph. If so, display the box.
         if ( this.counter == 0 ) {
+
+            // freeze player movement.
+            PlayerMovementController.instance.FreezePlayer();
             
             // set speaker name in the dialogue box.
             DialogueBox.instance.speakerName.SetName( this.name );
@@ -49,18 +55,16 @@ public class StaticDialogue : MonoBehaviour {
             // check if we are displaying the last paragraph.
             islast = ( this.counter == this.paragraphs.Length - 1 ) ? true : false;
 
-            // display accept sound if is not either the last paragraph or the first one.
-            if ( this.counter > 0 && this.counter < this.paragraphs.Length ) {
-                DialogueBox.instance.audioComponent.PlaySound( 1 );
-            }
-
-            StartCoroutine( DialogueBox.instance.content.DisplayDialogueText( this.paragraphs[ this.counter] , DialogueBox.instance.audioComponent, islast ) );
+            StartCoroutine( DialogueBox.instance.content.DisplayDialogueText( this.paragraphs[ this.counter ] , DialogueBox.instance.audioComponent, islast ) );
             this.counter++;
         } else {
 
             // close dialogue box.
             DialogueBox.instance.Hide();
             this.counter = 0;
+
+            // allow player to move again.
+            PlayerMovementController.instance.UnFreezePlayer();
         }
     }
 
@@ -96,13 +100,20 @@ public class StaticDialogue : MonoBehaviour {
     private void ListenForPlayerInput() {
 
         // get player action only if the player is colliding the speaker.
-        if ( this.playerColliding && Input.GetKeyDown( "z" ) ) {
+        string objectFacedByPlayer = ( PlayerVisionRange.instance.GetClosestGameObject() != null ) ? PlayerVisionRange.instance.GetClosestGameObject().name : "";
+
+        if ( this.playerColliding && objectFacedByPlayer == gameObject.name && Input.GetKeyDown( "z" ) ) {
+
+            // display accept sound if is not either the last paragraph or the first one.
+            if ( this.counter > 0 && this.counter < this.paragraphs.Length ) {
+                DialogueBox.instance.audioComponent.PlaySound( 2 );
+            }
 
             // start dialogue
             if ( ! DialogueBox.instance.content.IsDisplayingText() ) {
                 StartCoroutine( TriggerDialogue() );
             } else {
-                DialogueBox.instance.content.StopDisplayingText( this.paragraphs[ this.counter ] );
+                DialogueBox.instance.content.StopDisplayingText( this.paragraphs[ this.counter - 1 ] );
             }
         }
     }

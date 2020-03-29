@@ -40,7 +40,9 @@ public class BasicSignal : MonoBehaviour {
         if ( this.colliding ) {
 
             // display sound when the player attemps to move towards the basic signal.
-            if ( PlayerMovementController.instance.isMoving && ! this.playingAudio ) {
+            string objectFacedByPlayer = ( PlayerVisionRange.instance.GetClosestGameObject() != null ) ? PlayerVisionRange.instance.GetClosestGameObject().name : "";
+
+            if ( PlayerMovementController.instance.isMoving && objectFacedByPlayer == gameObject.name && ! this.playingAudio ) {
                 StartCoroutine( PlayCollisionAudio() );
             }
         }
@@ -55,9 +57,17 @@ public class BasicSignal : MonoBehaviour {
 
         // trigger logic only with player stops colliding this object.
         if ( other.gameObject.tag == "Player" ) {
-            this.colliding = true;
+            Invoke( "SetPlayerCollided", .5f );
         }
         
+    }
+
+    /// <summary>
+    /// Set player as colliding with this
+    /// object.
+    /// </summary>
+    public void SetPlayerCollided() {
+        this.colliding = true;
     }
 
     /// <summary>

@@ -8,6 +8,15 @@ public class PlayerVisionRange : MonoBehaviour {
     private GameObject closestGameObject;                           // Closest gameObject the player is looking at.
     private bool allowRays;                                         // Flag to control whether player raycasting is allowed. Used to improve performance.
 
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    void Awake() {
+        if ( instance == null ) {
+            instance = this;
+        }
+    }
+
     // Start is called before the first frame update
     void Start() {
         Init();

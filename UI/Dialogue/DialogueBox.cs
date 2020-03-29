@@ -56,8 +56,5 @@ public class DialogueBox : MonoBehaviour {
 
         // get animation component reference.
         animationComponent = GetComponent<AnimationComponent>();
-
-        // get audio component reference.
-        audioComponent = GetComponent<AudioComponent>();
     }
 }
