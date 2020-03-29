@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class SpeakerName : MonoBehaviour {
+    public AnimationComponent animationComponent;                      // Animation component reference.
     private Color originalColor;                                         // Original text color.
     private TextComponent textComponent;                                // Text component reference.
-    private AnimationComponent animationComponent;                      // Animation component reference.
     
     // Start is called before the first frame update
     void Start() {
@@ -22,6 +22,16 @@ public class SpeakerName : MonoBehaviour {
 
         // set original color.
         textComponent.UpdateColour( originalColor );
+
+        textComponent.UpdateContent( "" );
+    }
+
+    /// <summary>
+    /// Set speaker name.
+    /// <param name="speakerName">string - speaker name</param>
+    /// </summary>
+    public void SetName( string speakerName ) {
+        textComponent.UpdateContent( speakerName );
     }
 
 

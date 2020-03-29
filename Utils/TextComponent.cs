@@ -25,7 +25,7 @@ public class TextComponent : MonoBehaviour {
     /// Update content.
     /// </summary>
     /// <param name="newContent">string - new content to be displayed in this text component.</param>
-    public void UpdateComponent( string newContent ) {
+    public void UpdateContent( string newContent ) {
         content.text = newContent;
     }
 

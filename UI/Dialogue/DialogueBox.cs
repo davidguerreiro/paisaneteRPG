@@ -6,8 +6,8 @@ public class DialogueBox : MonoBehaviour {
     public static DialogueBox instance;                                 // Public static class instance.
     public SpeakerName speakerName;                                     // Dialogue speaker name displayed at the top of the dialogue box.
     public Content content;                                             // Content displayed on the dialogue box.
+    public AudioComponent audioComponent;                              // Audio component refernce.
     private AnimationComponent animationComponent;                      // Animation Component reference.
-    private AudioComponent audioComponent;                              // Audio component refernce.
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
@@ -41,6 +41,11 @@ public class DialogueBox : MonoBehaviour {
     /// </summary>
     public void Hide() {
         // TODO: Add remove box audio call here.
+
+        // reset dialoge box components.
+        speakerName.ResetComponent();
+        content.Reset();
+
         animationComponent.Hide();
     }
 

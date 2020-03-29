@@ -23,6 +23,15 @@ public class Content : MonoBehaviour {
     }
 
     /// <summary>
+    /// Check if text is
+    /// being displayed.
+    /// </summary>
+    /// <returns>bool</returns>
+    public bool IsDisplayingText() {
+        return this.displayingText;
+    }
+
+    /// <summary>
     /// Stop displaying
     /// text. This will display all the
     /// content in the dialogue box.
