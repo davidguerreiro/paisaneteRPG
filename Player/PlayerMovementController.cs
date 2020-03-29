@@ -3,12 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovementController : MonoBehaviour {
-
+    public static PlayerMovementController instance;    // Public static class instance.
     public float movementSpeed;                         // Player's movement speed.
+    public bool canMove;                                // Flag to control whether the player can move.
+    public bool isMoving;                               // Flag to control whether the player is moving or stopped.
     private Vector2 movement;                           // Temporal vector used to get player's movement direction.
     private Rigidbody2D rigidbody2D;                    // Rigibody 2D component reference.
     private Animator animator;                          // Animator class component reference.
+    
     private string animationState;                      // Animation state variable name.
+    private string playerFacingDirection;               // Records which direction the player is facing.
+
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    void Awake() {
+        if ( instance == null ) {
+            instance = this;
+        }
+    }
 
     // values for animation variables machine states.
     enum CharStates {
@@ -17,6 +30,29 @@ public class PlayerMovementController : MonoBehaviour {
         walkWest = 3,
         walkNorth = 4,
         idleSouth = 5,
+    }
+
+    /// <summary>
+    /// Get player's facing
+    /// direction.
+    /// </summary>
+    /// <returns>string</returns>
+    public string GetFacingDirection() {
+        return this.playerFacingDirection;
+    }
+
+    /// <summary>
+    /// Freeze player's movement.
+    /// </summary>
+    public void FreezePlayer() {
+        this.canMove = false;
+    }
+
+    /// <summary>
+    /// Unfreeze player's movement.
+    /// </summary>
+    public void UnFreezePlayer() {
+        this.canMove = true;
     }
 
     // Start is called before the first frame update
@@ -33,7 +69,10 @@ public class PlayerMovementController : MonoBehaviour {
     /// This function is called every fixed framerate frame, if the MonoBehaviour is enabled.
     /// </summary>
     void FixedUpdate() {
-        MovePlayerByInput();
+
+        if ( this.canMove ) {
+            MovePlayerByInput();
+        }
     }
 
     /// <summary>
@@ -47,25 +86,30 @@ public class PlayerMovementController : MonoBehaviour {
         // check for east movement animation.
         if ( movement.x > 0 ) {
             animator.SetInteger( this.animationState, (int) CharStates.walkEast );
+            this.playerFacingDirection = "right";
         }
 
         // check for west movement animation.
         else if ( movement.x < 0 ) {
             animator.SetInteger( this.animationState, (int) CharStates.walkWest ); 
+            this.playerFacingDirection = "left";
         }
 
         // check for north movement animation.
         else if ( movement.y > 0 ) {
             animator.SetInteger( this.animationState, (int) CharStates.walkNorth );
+            this.playerFacingDirection = "top";
         }
 
         // check for south movement animation.
         else if ( movement.y < 0 ) {
             animator.SetInteger( this.animationState, (int) CharStates.walkSouth );
+            this.playerFacingDirection = "down";
         }
 
         // if none of the above, then display player idle animation for no-movement state.
         else {
+            // TODO: Add idle animation for all directions here based in player facing direction.
             animator.SetInteger( this.animationState, (int) CharStates.idleSouth );
         }
     }
@@ -86,6 +130,9 @@ public class PlayerMovementController : MonoBehaviour {
 
         // update velocity value in the rigibody component.
         rigidbody2D.velocity = movement * this.movementSpeed;
+
+        // update player movement flag.
+        this.isMoving = ( rigidbody2D.velocity.magnitude > 0f ) ? true : false;
     }
 
     /// <summary>
@@ -101,5 +148,10 @@ public class PlayerMovementController : MonoBehaviour {
 
         // set default value for animation state controller variable name;
         this.animationState = "AnimationState";
+
+        // set default value for movement control attributes.
+        this.canMove = true;
+        this.isMoving = false;
+        this.playerFacingDirection = "down";
     }
 }

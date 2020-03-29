@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class BasicSignal : MonoBehaviour {
     private AudioComponent audio;                                   // Audio component class reference.
-    private bool collided;                                          // Flag to control the player has not collided before. We let player to collide once to read the signal, after that, we play collision sfx.
+    private bool colliding;                                         // Flag to control the player is in collision to the signal.
     private bool playingAudio;                                      // Flag to control collison audio is not played several times at the same time.
 
     // Start is called before the first frame update
     void Start() {
         Init();
+    }
+
+    /// <summary>
+    /// Update is called every frame, if the MonoBehaviour is enabled.
+    /// </summary>
+    void FixedUpdate() {
+        ListenForPlayerAction();
     }
 
     /// <summary>
@@ -26,6 +33,20 @@ public class BasicSignal : MonoBehaviour {
     }
 
     /// <summary>
+    /// Listen for player action.
+    /// </summary>
+    private void ListenForPlayerAction() {
+
+        if ( this.colliding ) {
+
+            // display sound when the player attemps to move towards the basic signal.
+            if ( PlayerMovementController.instance.isMoving && ! this.playingAudio ) {
+                StartCoroutine( PlayCollisionAudio() );
+            }
+        }
+    }
+
+    /// <summary>
     /// Sent when an incoming collider makes contact with this object's
     /// collider (2D physics only).
     /// </summary>
@@ -34,12 +55,7 @@ public class BasicSignal : MonoBehaviour {
 
         // trigger logic only with player stops colliding this object.
         if ( other.gameObject.tag == "Player" ) {
-            
-            if ( this.collided && ! this.playingAudio ) {
-                StartCoroutine( PlayCollisionAudio() );
-            }
-
-            this.collided = true;
+            this.colliding = true;
         }
         
     }
@@ -53,10 +69,10 @@ public class BasicSignal : MonoBehaviour {
         
         // trigger logic only when the player stops colliding this object.
         if ( other.gameObject.tag == "Player" ) {
-            this.collided = false;
+            this.colliding = false;
         }
     }
-
+    
     /// <summary>
     /// Init class method.
     /// </summary>
@@ -66,7 +82,7 @@ public class BasicSignal : MonoBehaviour {
         audio = GetComponent<AudioComponent>();
 
         // set default value for control flags.
-        this.collided = false;
+        this.colliding = false;
         this.playingAudio = false;
     }
 }
