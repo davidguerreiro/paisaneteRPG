@@ -14,5 +14,5 @@ public class Item : ScriptableObject {
         HEALTH
     };
 
-    public ItemType itemType;                                   // Type of item, or item class.
+    public ItemType itemType;                                   // Type of item, or item class. Not visible for the player.
 }
