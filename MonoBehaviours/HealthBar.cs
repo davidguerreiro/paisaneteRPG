@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class HealthBar : MonoBehaviour {
 
     public HitPoints hitPoints;                             // Hit points scriptable object refernece.
-    [HideInInspector]
     public Player character;                                // Player character class reference.
     public Image meterImage;                                // Health bar image class reference.
     public Text hpText;                                     // hpText text class reference.

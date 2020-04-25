@@ -92,6 +92,6 @@ public class Player : Character {
         healthBar = Instantiate( healthBarPrefab );
 
         // set healthbar script player referece to this instance.
-        healthBar.character = this;
+        // healthBar.character = this;
     }
 }
