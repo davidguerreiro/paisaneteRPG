@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class Player : Character {
 
+    public HealthBar healthBarPrefab;                       // Reference to health bar prefab class. Used her to instantiate a copy.
+    HealthBar healthBar;                                    // This stores the refernce to the healthbar prefab copy.
+
+    /// <summary>
+    /// Start is called on the frame when a script is enabled just before
+    /// any of the Update methods is called the first time.
+    /// </summary>
+    void Start() {
+        Init();
+    }
 
     /// <summary>
     /// Sent when another object enters a trigger collider attached to this
@@ -29,10 +39,13 @@ public class Player : Character {
         Item hitObject = objectCollided.GetComponent<Consumable>().item;
 
         if ( hitObject != null ) {
+            
+            bool shouldDissapear = true;
 
             // trigger logic based on item type.
             switch ( hitObject.itemType ) {
                 case Item.ItemType.COIN:            // logic for coins
+                    shouldDissapear = true;
                     break;
                 case Item.ItemType.HEALTH:
                     AdjustHitPoints( hitObject.quantity );
@@ -40,17 +53,42 @@ public class Player : Character {
                 default:
                     break;
             }
+
+            if ( shouldDissapear ) {
+                objectCollided.SetActive( false );
+            }
         }
 
-        objectCollided.SetActive( false );
+        
     }
 
     /// <summary>
     /// Update player hit points.
     /// </summary>
     /// <param name="amount">int - amount of hit points to use to update player's healt</param>
-    public void AdjustHitPoints( int amount ) {
-        hitPoints = hitPoints + amount;
-        Debug.Log( "Adjusted hitpoints by: " + amount + ". New value:" + hitPoints );
+    public bool AdjustHitPoints( int amount ) {
+
+        // check that the player can collect the hearth
+        if ( hitPoints.value < maxHitPoints ) {
+
+            hitPoints.value = hitPoints.value + amount;
+            Debug.Log( "Adjusted hitpoints by: " + amount + ". New value:" + hitPoints );    
+
+            return true;
+        }
+        
+        return false;
+    }
+
+    /// <summary>
+    /// Init class method.
+    /// </summary>
+    private void Init() {
+
+        // set default initial starting hitpoints.
+        hitPoints.value = startingHitPoints;
+
+        // instantiate a copy of the health bar prefab.
+        healthBar = Instantiate( healthBarPrefab );
     }
 }
