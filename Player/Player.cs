@@ -5,7 +5,9 @@ using UnityEngine;
 public class Player : Character {
 
     public HealthBar healthBarPrefab;                       // Reference to health bar prefab class. Used her to instantiate a copy.
-    HealthBar healthBar;                                    // This stores the refernce to the healthbar prefab copy.
+    public Inventory inventoryPrefab;                       // Reference to the inventory prefab.
+    private Inventory inventory;                                    // This stores a reference to the inventory prefab copy.
+    private HealthBar healthBar;                                    // This stores the refernce to the healthbar prefab copy.
 
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
@@ -45,7 +47,7 @@ public class Player : Character {
             // trigger logic based on item type.
             switch ( hitObject.itemType ) {
                 case Item.ItemType.COIN:            // logic for coins
-                    shouldDissapear = true;
+                    shouldDissapear = inventory.AddItem( hitObject );
                     break;
                 case Item.ItemType.HEALTH:
                     AdjustHitPoints( hitObject.quantity );
@@ -93,5 +95,8 @@ public class Player : Character {
 
         // set healthbar script player referece to this instance.
         // healthBar.character = this;
+
+        // instantiate a copy of the inventory.
+        inventory = Instantiate( inventoryPrefab );
     }
 }
