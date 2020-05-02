@@ -41,5 +41,6 @@ public class HealthBar : MonoBehaviour {
 
         // get max hit points from the player.
         this.maxHitPoints = character.maxHitPoints;
+        Debug.Log( this.maxHitPoints );
     }
 }

@@ -36,13 +36,14 @@ public class Inventory : MonoBehaviour {
                 newSlot.name = "ItemSlot_" + i;
 
                 // set new slot in the hireachy as a part of the inventory item -  this is because this script is attached to the InventoryBackground
-                newSlot.transform.SetParent( gameObject.transform.GetChild(0).transform );
+                newSlot.transform.SetParent( gameObject.transform );
 
                 // keep a reference of the slot
                 slots[i] = newSlot;
 
                 // keep a reference of the image component for the slot
                 itemImages[i] = newSlot.transform.GetChild(1).GetComponent<Image>();
+                
             }
         }
     }
@@ -51,7 +52,6 @@ public class Inventory : MonoBehaviour {
     /// Init class method.
     /// </summary>
     private void Init() {
-
         // display slots in the screen.
         CreateSlots();
     }
@@ -85,6 +85,8 @@ public class Inventory : MonoBehaviour {
 
             // item does not exist in the inventory - add item if there is space available in the slots.
             if ( items[i] == null ) {
+
+                Debug.Log( i );
 
                 // add item to empty slot
                 items[i] = Instantiate( itemToAdd );

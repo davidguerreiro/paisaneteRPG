@@ -33,7 +33,7 @@ public class PlayerVisionRange : MonoBehaviour {
             TriggerClosestVision();
 
             if ( closestGameObject != null ) {
-                Debug.Log( closestGameObject.name );
+                //Debug.Log( closestGameObject.name );
             }
         }
     }

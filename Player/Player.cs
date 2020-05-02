@@ -5,8 +5,7 @@ using UnityEngine;
 public class Player : Character {
 
     public HealthBar healthBarPrefab;                       // Reference to health bar prefab class. Used her to instantiate a copy.
-    public Inventory inventoryPrefab;                       // Reference to the inventory prefab.
-    private Inventory inventory;                                    // This stores a reference to the inventory prefab copy.
+    public Inventory inventory;                                    // This stores a reference to the inventory prefab copy.
     private HealthBar healthBar;                                    // This stores the refernce to the healthbar prefab copy.
 
     /// <summary>
@@ -87,6 +86,8 @@ public class Player : Character {
     /// </summary>
     private void Init() {
 
+        Debug.Log( "called player" );
+
         // set default initial starting hitpoints.
         hitPoints.value = startingHitPoints;
 
@@ -97,6 +98,6 @@ public class Player : Character {
         // healthBar.character = this;
 
         // instantiate a copy of the inventory.
-        inventory = Instantiate( inventoryPrefab );
+        // inventory = Instantiate( inventoryPrefab );
     }
 }
