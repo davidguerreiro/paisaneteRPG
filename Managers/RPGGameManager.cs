@@ -5,6 +5,7 @@ using UnityEngine;
 public class RPGGameManager : MonoBehaviour {
     public static RPGGameManager instance;                                  // Public static class instance.
     public SpawnPoint playerSpawnPoint;                                     // Player spawn point class reference.
+    public RPGCameraManager cameraManager;                                  // Camera manager
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
@@ -39,6 +40,7 @@ public class RPGGameManager : MonoBehaviour {
 
         if ( playerSpawnPoint != null ) {
             GameObject player = playerSpawnPoint.SpawnObject();
+            cameraManager.virtualCamera.Follow = player.transform;
         }
     }
 
