@@ -73,7 +73,7 @@ public class Player : Character {
         if ( hitPoints.value < maxHitPoints ) {
 
             hitPoints.value = hitPoints.value + amount;
-            Debug.Log( "Adjusted hitpoints by: " + amount + ". New value:" + hitPoints );    
+            Debug.Log( "Adjusted hitpoints by: " + amount + ". New value:" + hitPoints.value );    
 
             return true;
         }
@@ -86,18 +86,21 @@ public class Player : Character {
     /// </summary>
     private void Init() {
 
-        Debug.Log( "called player" );
-
         // set default initial starting hitpoints.
         hitPoints.value = startingHitPoints;
 
-        // instantiate a copy of the health bar prefab.
-        healthBar = Instantiate( healthBarPrefab );
-
         // set healthbar script player referece to this instance.
-        // healthBar.character = this;
+        // healthBar.character = this;`
 
         // instantiate a copy of the inventory.
         // inventory = Instantiate( inventoryPrefab );
+
+        // health bar and inventory setup when the player is instantiated.
+        // setup healthbar.
+        healthBar = GameObject.FindGameObjectWithTag( "HealthBar" ).GetComponent<HealthBar>();
+        healthBar.SetPlayerReference( this );
+
+        // setup inventory.
+        inventory = GameObject.FindGameObjectWithTag( "Inventory" ).GetComponent<Inventory>();
     }
 }

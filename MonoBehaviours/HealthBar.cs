@@ -35,12 +35,20 @@ public class HealthBar : MonoBehaviour {
     }
 
     /// <summary>
+    /// Set up player variable.
+    /// </summary>
+    /// <param name="player">Player class instance reference.</param>
+    public void SetPlayerReference( Player player ) {
+        this.character = player;
+        this.maxHitPoints = character.maxHitPoints;
+    }
+
+    /// <summary>
     /// Init class method.
     /// </summary>
     private void Init() {
 
         // get max hit points from the player.
-        this.maxHitPoints = character.maxHitPoints;
-        Debug.Log( this.maxHitPoints );
+        // this.maxHitPoints = character.maxHitPoints;
     }
 }

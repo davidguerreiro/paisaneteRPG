@@ -86,10 +86,10 @@ public class Inventory : MonoBehaviour {
             // item does not exist in the inventory - add item if there is space available in the slots.
             if ( items[i] == null ) {
 
-                Debug.Log( i );
-
                 // add item to empty slot
                 items[i] = Instantiate( itemToAdd );
+
+                Debug.Log( itemToAdd.sprite );
                 
                 // update item properties.
                 items[i].quantity = 1;
