@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : Character {
-
+    public HitPoints hitPoints;                                     // Current hit points value.
     public HealthBar healthBarPrefab;                       // Reference to health bar prefab class. Used her to instantiate a copy.
     public Inventory inventory;                                    // This stores a reference to the inventory prefab copy.
     private HealthBar healthBar;                                    // This stores the refernce to the healthbar prefab copy.
@@ -13,7 +13,7 @@ public class Player : Character {
     /// any of the Update methods is called the first time.
     /// </summary>
     void Start() {
-        Init();
+        ResetCharacter();
     }
 
     /// <summary>
@@ -82,9 +82,48 @@ public class Player : Character {
     }
 
     /// <summary>
-    /// Init class method.
+    /// Kill character.
     /// </summary>
-    private void Init() {
+    public override void KillCharacter() {
+
+        // call parent killCharacter.
+        base.KillCharacter();
+
+        // remove current game UI.
+        Destroy( healthBar.gameObject );
+        Destroy( inventory.gameObject );
+    }
+
+    /// <summary>
+    /// Damage character.
+    /// </summary>
+    /// <param name="damage">int - damage received by the character</param>
+    /// <param name="interval">float - interval to use if the damage is recurrent</param>
+    /// <returns>IEnumerator</returns>
+    public override IEnumerator DamageCharacter( int damage, float interval ) {
+
+        while ( true ) {
+
+            this.hitPoints.value = hitPoints.value - damage;
+
+            if ( this.hitPoints.value <= float.Epsilon ) {
+                KillCharacter();
+                break;
+            }
+
+            // check if recurrent damage.
+            if ( interval > float.Epsilon ) {
+                yield return new WaitForSeconds( interval );
+            } else {
+                break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Reset Character.
+    /// </summary>
+    public override void ResetCharacter() {
 
         // set default initial starting hitpoints.
         hitPoints.value = startingHitPoints;
@@ -102,5 +141,12 @@ public class Player : Character {
 
         // setup inventory.
         inventory = GameObject.FindGameObjectWithTag( "Inventory" ).GetComponent<Inventory>();
+    }
+
+    /// <summary>
+    /// Init class method.
+    /// </summary>
+    private void Init() {
+
     }
 }

@@ -4,8 +4,6 @@ using UnityEngine;
 
 // abstract class means it cannot be instantiated, and therefore must be inherited by a subclass.
 public abstract class Character : MonoBehaviour {
-
-    public HitPoints hitPoints;                                     // Current hit points value.
     public float maxHitPoints;                                      // Maximun hit points value.
     public float startingHitPoints;                                 // Number of hit points the character starts with.
 
@@ -18,4 +16,25 @@ public abstract class Character : MonoBehaviour {
     void Update() {
         
     }
+
+    /// <summary>
+    /// Kill character.
+    /// </summary>
+    public virtual void KillCharacter() {
+        Destroy( gameObject );
+    }
+
+    /// <summary>
+    /// Reset Character.
+    /// </summary>
+    public abstract void ResetCharacter();
+
+    /// <summary>
+    /// Damage character.
+    /// </summary>
+    /// <param name="damage">int - damage received by the character</param>
+    /// <param name="interval">float - interval to use if the damage is recurrent</param>
+    /// <returns>IEnumerator</returns>
+    public abstract IEnumerator DamageCharacter( int damage, float interval ); 
+
 }
