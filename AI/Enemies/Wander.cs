@@ -132,6 +132,6 @@ public class Wander : MonoBehaviour {
         rigibody2d = GetComponent<Rigidbody2D>();
 
         // init wander coroutine.
-        StartCoroutine( WanderCoroutine() );
+        StartCoroutine( WanderRoutine() );
     }
 }
