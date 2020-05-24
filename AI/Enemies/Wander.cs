@@ -9,8 +9,8 @@ using UnityEngine;
 public class Wander : MonoBehaviour {
     public float pursuitSpeed;                                  // Enemy movement speed when chasing the player.
     public float wanderSpeed;                                   // Enemy movement speed when wandering out in the field.
-    public bool followPlayer;                                   // Flag to control whether the enemy if following the player.
     public float directionChangeInterval;                       // Determines how often the enemy changes direction when wandering around.
+    public bool followPlayer;                                   // Flag to control whether the enemy if following the player.
     float currentSpeed;                                         // Current enemy speed.
     Coroutine moveCoroutine;                                    // Movement coroutine.
     Rigidbody2D rigibody2d;                                     // Rigibody 2d component reference.
@@ -45,7 +45,7 @@ public class Wander : MonoBehaviour {
                 StopCoroutine( moveCoroutine );
             }
 
-           //  moveCoroutine = StartCoroutine( Move( rigibody2d, this.currentSpeed ) );
+            moveCoroutine = StartCoroutine( Move( rigibody2d, this.currentSpeed ) );
 
             yield return new WaitForSeconds( this.directionChangeInterval );
         }
@@ -132,6 +132,6 @@ public class Wander : MonoBehaviour {
         rigibody2d = GetComponent<Rigidbody2D>();
 
         // init wander coroutine.
-        // StartCoroutine( WanderCoroutine() );
+        StartCoroutine( WanderCoroutine() );
     }
 }
