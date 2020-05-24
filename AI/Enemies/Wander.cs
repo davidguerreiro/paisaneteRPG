@@ -52,6 +52,46 @@ public class Wander : MonoBehaviour {
     }
 
     /// <summary>
+    /// Move enemy to choosen point
+    /// during the wandering state.
+    /// </summary>
+    /// <param name="rigiBodyToMove">Rigibody2D - rigibody component which is going to be moved</param>
+    /// <param name="speed">float - movement speed.</param>
+    /// <returns>IEnumerator</returns>
+    public IEnumerator Move( Rigidbody2D rigiBodyToMove, float speed ) {
+
+        // get remaining distance between current position and move position in float number.
+        float remainingDistance = ( transform.position - endPosition ).sqrMagnitude;
+
+        while ( remainingDistance > float.Epsilon ) {
+
+            // if the enemy is pursuing the player, the end position is altered
+            // to be the player's position.
+            if ( targetTransform != null ) {
+                endPosition = targetTransform.position;
+            }
+
+            // move enemy.
+            if ( rigiBodyToMove != null ) {
+
+                animator.SetBool( "IsWalking", true );
+                
+                // move towards calculates the next position where the enemy has to move. MovePosition actually moves the enemy to new calculated position.
+                Vector3 newPosition = Vector3.MoveTowards( rigiBodyToMove.position, endPosition, speed * Time.deltaTime );
+                rigibody2d.MovePosition( newPosition );
+
+                remainingDistance = ( transform.position - endPosition ).sqrMagnitude;
+            }
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        // stop moving animation when the loop is closed.
+        animator.SetBool( "IsWalking", false );
+
+    }
+
+    /// <summary>
     /// Choose a new point in the world
     /// for the enemy to move in.
     /// </summary>
