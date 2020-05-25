@@ -88,8 +88,6 @@ public class Inventory : MonoBehaviour {
 
                 // add item to empty slot
                 items[i] = Instantiate( itemToAdd );
-
-                Debug.Log( itemToAdd.sprite );
                 
                 // update item properties.
                 items[i].quantity = 1;

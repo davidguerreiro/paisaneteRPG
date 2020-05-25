@@ -18,6 +18,7 @@ public class Wander : MonoBehaviour {
     Transform targetTransform = null;                           // Target transform component reference.
     Vector3 endPosition;                                        // Destination where the enemy is wandering.
     float currentAngle = 0;                                     // When choosing a new direction to wander, a new angle is added to the existing angle. The angle is used to generate a vector, which becomes the destination.
+    private CircleCollider2D circleCollider2D;                  // Circle collider 2D component refernece. Used to drawn gizmos for debugging.
 
     // Start is called before the first frame update
     void Start() {
@@ -25,9 +26,9 @@ public class Wander : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
+    void Update() {
+        // debug movement destination line.
+        Debug.DrawLine( rigibody2d.position, endPosition, Color.red );
     }
 
     /// <summary>
@@ -184,6 +185,17 @@ public class Wander : MonoBehaviour {
     }
 
     /// <summary>
+    /// Callback to draw gizmos that are pickable and always drawn.
+    /// </summary>
+    void OnDrawGizmos() {
+        
+        // draw enemiy range of view.
+        if ( circleCollider2D != null ) {
+            Gizmos.DrawWireSphere( transform.position, circleCollider2D.radius );
+        }
+    }
+
+    /// <summary>
     /// Init class method.
     /// </summary>
     private void Init() {
@@ -196,6 +208,9 @@ public class Wander : MonoBehaviour {
 
         // get rigibody 2d component reference.
         rigibody2d = GetComponent<Rigidbody2D>();
+
+        // get circle 2d component reference.
+        circleCollider2D = GetComponent<CircleCollider2D>();
 
         // init wander coroutine.
         StartCoroutine( WanderRoutine() );
