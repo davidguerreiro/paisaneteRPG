@@ -74,12 +74,13 @@ public class Wander : MonoBehaviour {
             // move enemy.
             if ( rigiBodyToMove != null ) {
 
-                animator.SetBool( "IsWalking", true );
+                animator.SetBool( "isWalking", true );
                 
                 // move towards calculates the next position where the enemy has to move. MovePosition actually moves the enemy to new calculated position.
                 Vector3 newPosition = Vector3.MoveTowards( rigiBodyToMove.position, endPosition, speed * Time.deltaTime );
                 rigibody2d.MovePosition( newPosition );
 
+                
                 remainingDistance = ( transform.position - endPosition ).sqrMagnitude;
             }
 
@@ -87,7 +88,7 @@ public class Wander : MonoBehaviour {
         }
 
         // stop moving animation when the loop is closed.
-        animator.SetBool( "IsWalking", false );
+        animator.SetBool( "isWalking", false );
 
     }
 
@@ -115,6 +116,71 @@ public class Wander : MonoBehaviour {
         float inputAngleRadians = inputAngleDegrees * Mathf.Deg2Rad;
 
         return new Vector3( Mathf.Cos( inputAngleRadians ), Mathf.Sin( inputAngleRadians ), 0 );
+    }
+
+    /// <summary>
+    /// Sent when another object enters a trigger collider attached to this
+    /// object (2D physics only).
+    /// </summary>
+    /// <param name="collision">The other Collider2D involved in this collision.</param>
+    void OnTriggerEnter2D( Collider2D collision ) {
+        
+        // if the player enters the wander view range and pursuit mode is enable for this entity, them enable pursueMode.
+        if ( collision.gameObject.CompareTag("Player") && this.followPlayer ) {
+            PursuePlayer( collision.gameObject );
+        }
+    }
+
+    /// <summary>
+    /// Sent when another object leaves a trigger collider attached to
+    /// this object (2D physics only).
+    /// </summary>
+    /// <param name="collision">The other Collider2D involved in this collision.</param>
+    void OnTriggerExit2D( Collider2D collision ) {
+        
+        // if the player leaves the wander view range, the wander entity stops chasing the player and returns back to wandering state.
+        if ( collision.gameObject.CompareTag( "Player" ) ) {
+            StopPursuingPlayer();
+        }
+    }
+
+    /// <summary>
+    /// Enable pursue mode, so this 
+    /// wander entity pursues the player.
+    /// </summary>
+    /// <param name="pursueTarget">GameObject - gameObject referent to target to be pursued</param>
+    private void PursuePlayer( GameObject pursueTarget ) {
+
+        // set new target and new movement speed.
+        this.currentSpeed = this.pursuitSpeed;
+        targetTransform = pursueTarget.transform;
+
+        // stop wandering coroutine if neccesary.
+        if ( moveCoroutine != null ) {
+            StopCoroutine( moveCoroutine );
+        }
+
+        moveCoroutine = StartCoroutine( Move( rigibody2d, currentSpeed ) );
+    }
+
+    /// <summary>
+    /// Disable pursue mode and set wanderer
+    /// entity to wander again.
+    /// </summary>
+    private void StopPursuingPlayer() {
+
+        animator.SetBool( "isWalking", false );
+
+        // set wander speed.
+        this.currentSpeed = this.wanderSpeed;
+
+        // stop pursuing if neccesary
+        if ( moveCoroutine != null ) {
+            StopCoroutine( moveCoroutine );
+        }
+
+        // disable target transform.
+        targetTransform = null;
     }
 
     /// <summary>
