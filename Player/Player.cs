@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Player : Character {
     public HitPoints hitPoints;                                     // Current hit points value.
-    public HealthBar healthBarPrefab;                       // Reference to health bar prefab class. Used her to instantiate a copy.
-    public Inventory inventory;                                    // This stores a reference to the inventory prefab copy.
+    public PlayerAmmo playerAmmo;                                   // Current player ammo.
+    public HealthBar healthBarPrefab;                               // Reference to health bar prefab class. Used her to instantiate a copy.
+    public Inventory inventory;                                     // This stores a reference to the inventory prefab copy.
     private HealthBar healthBar;                                    // This stores the refernce to the healthbar prefab copy.
+    private Animation animation;                                    // Animation component reference.
 
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
@@ -49,7 +51,10 @@ public class Player : Character {
                     shouldDissapear = inventory.AddItem( hitObject );
                     break;
                 case Item.ItemType.HEALTH:
-                    AdjustHitPoints( hitObject.quantity );
+                    shouldDissapear = AdjustHitPoints( hitObject.quantity );
+                    break;
+                case Item.ItemType.AMMO:
+                    shouldDissapear = AdjustAmmo( hitObject.quantity );
                     break;
                 default:
                     break;
@@ -67,17 +72,41 @@ public class Player : Character {
     /// Update player hit points.
     /// </summary>
     /// <param name="amount">int - amount of hit points to use to update player's healt</param>
+    /// <returns>bool</returns>
     public bool AdjustHitPoints( int amount ) {
 
         // check that the player can collect the hearth
         if ( hitPoints.value < maxHitPoints ) {
 
             hitPoints.value = hitPoints.value + amount;
-            Debug.Log( "Adjusted hitpoints by: " + amount + ". New value:" + hitPoints.value );    
+            // Debug.Log( "Adjusted hitpoints by: " + amount + ". New value:" + hitPoints.value );    
 
             return true;
         }
         
+        return false;
+    }
+
+    /// <summary>
+    /// Adjust player ammo.
+    /// </summary>
+    /// <param name="amount">int - amount of ammo updated</param>
+    /// <returns>bool</returns>
+    public bool AdjustAmmo( int amount ) {
+
+        // check if the player can carry more munition.
+        if ( playerAmmo.value < playerAmmo.maximun ) {
+
+            playerAmmo.value += amount;
+
+            if ( playerAmmo.value > playerAmmo.maximun ) {
+                playerAmmo.value = playerAmmo.maximun;
+                return false;
+            }
+
+            return true;
+        }
+
         return false;
     }
 
@@ -99,12 +128,18 @@ public class Player : Character {
     /// </summary>
     /// <param name="damage">int - damage received by the character</param>
     /// <param name="interval">float - interval to use if the damage is recurrent</param>
+    /// <param name="damager">Collider2D - used for applying logic based on collider.</param>
     /// <returns>IEnumerator</returns>
-    public override IEnumerator DamageCharacter( int damage, float interval ) {
+    public override IEnumerator DamageCharacter( int damage, float interval, Collider2D damager = null ) {
 
         while ( true ) {
 
             this.hitPoints.value = hitPoints.value - damage;
+
+            // display hurt animation.
+            if ( animation != null ) {
+                Utils.instance.TriggerAnimation( animation, "damagedEnemy" );
+            }
 
             if ( this.hitPoints.value <= float.Epsilon ) {
                 KillCharacter();
@@ -127,7 +162,7 @@ public class Player : Character {
 
         // set default initial starting hitpoints.
         hitPoints.value = startingHitPoints;
-
+        
         // set healthbar script player referece to this instance.
         // healthBar.character = this;`
 
@@ -141,6 +176,9 @@ public class Player : Character {
 
         // setup inventory.
         inventory = GameObject.FindGameObjectWithTag( "Inventory" ).GetComponent<Inventory>();
+
+        // get animation component.
+        animation = GetComponent<Animation>();
     }
 
     /// <summary>

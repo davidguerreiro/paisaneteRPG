@@ -18,7 +18,7 @@ public class Ammo : MonoBehaviour {
 
             // damage enemy.
             Enemy enemy = collision.gameObject.GetComponent<Enemy>();
-            StartCoroutine( enemy.DamageCharacter( damageInflicted, 0.0f ) );
+            StartCoroutine( enemy.DamageCharacter( damageInflicted, 0.0f, collision ) );
 
             // remove proyectile.
             gameObject.SetActive( false );

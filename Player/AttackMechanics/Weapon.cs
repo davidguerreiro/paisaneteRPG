@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour {
-    
+    public int initialAmmo;                             // Initial ammo quantity
     public GameObject ammoPrefab;                       // Ammo prefab - used to instantiate in the object pool for ammo.
+    public PlayerAmmo playerAmmo;                       // Player ammo scriptable object reference.
     public int poolSize;                                // Ammo object pool size.
+    public float weaponVelocity;                        // Ammo fired speed.
     static List<GameObject> ammoPool;                   // Ammo pool list of gameoObjects.
     
     /// <summary>
@@ -16,11 +18,19 @@ public class Weapon : MonoBehaviour {
     }
 
     /// <summary>
+    /// Start is called on the frame when a script is enabled just before
+    /// any of the Update methods is called the first time.
+    /// </summary>
+    void Start() {
+        Init();
+    }
+
+    /// <summary>
     /// Update is called every frame, if the MonoBehaviour is enabled.
     /// </summary>
     void Update() {
         
-        if ( Input.GetMouseButtonDown(0) ) {
+        if ( Input.GetMouseButtonDown(0) && playerAmmo.value > 0f ) {
             FireAmmo();
         }
     }
@@ -42,6 +52,9 @@ public class Weapon : MonoBehaviour {
 
                 ammo.SetActive( true );
                 ammo.transform.position = location;
+                
+                // ammo consumed.
+                playerAmmo.value--;
 
                 return ammo;
             }
@@ -56,6 +69,18 @@ public class Weapon : MonoBehaviour {
     /// </summary>
     private void FireAmmo() {
 
+        // get mouse position.
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint( Input.mousePosition );
+
+        GameObject ammo = SpawnAmmo( transform.position );
+
+        if ( ammo != null ) {
+
+            Arc arcScript = ammo.GetComponent<Arc>();
+            float travelDuration = 1.0f / weaponVelocity;
+
+            StartCoroutine( arcScript.TravelArc( mousePosition, travelDuration ) );
+        }
     }
 
     /// <summary>
@@ -83,5 +108,14 @@ public class Weapon : MonoBehaviour {
             ammoObject.SetActive( false );
             ammoPool.Add( ammoObject );
         }
+    }
+
+    /// <summary>
+    /// Init class method.
+    /// </summary>
+    public void Init() {
+
+        // set initial ammo value.
+        playerAmmo.value = this.initialAmmo;
     }
 }

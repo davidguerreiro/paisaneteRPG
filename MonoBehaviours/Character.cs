@@ -34,7 +34,8 @@ public abstract class Character : MonoBehaviour {
     /// </summary>
     /// <param name="damage">int - damage received by the character</param>
     /// <param name="interval">float - interval to use if the damage is recurrent</param>
+    /// <param name="damager">Collider2D - used for applying logic based on collider.</param>
     /// <returns>IEnumerator</returns>
-    public abstract IEnumerator DamageCharacter( int damage, float interval ); 
+    public abstract IEnumerator DamageCharacter( int damage, float interval, Collider2D damager = null ); 
 
 }

@@ -11,7 +11,8 @@ public class Item : ScriptableObject {
     public bool stackable;                                      // Wheter this item will be auto-consumed or saved in the inventory.
     public enum ItemType {
         COIN,
-        HEALTH
+        HEALTH,
+        AMMO
     };
 
     public ItemType itemType;                                   // Type of item, or item class. Not visible for the player.
