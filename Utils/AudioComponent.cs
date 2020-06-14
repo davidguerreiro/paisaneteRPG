@@ -30,6 +30,24 @@ public class AudioComponent : MonoBehaviour {
         audio.Play();
     }
 
+    /// <sumamry>
+    /// Set audio clip passed
+    /// by parameter.
+    /// </summary>
+    /// <param name="clip">AudioClip - new audio clip to play.</param>
+    /// <param name="autoPlay">bool - true by default. Wheter to play the audio now or later</param>
+    public void PlayClip( AudioClip clip, bool autoPlay = true ) {
+
+        if ( audio.isPlaying && autoPlay ) {
+            audio.Stop();
+        }
+
+        audio.clip = clip;
+
+        if ( autoPlay ) {
+            audio.Play();
+        }
+    }
     /// <summary>
     /// Play current sound.
     /// </summary>

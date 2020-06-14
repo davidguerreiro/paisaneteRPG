@@ -9,6 +9,7 @@ public class Player : Character {
     public Inventory inventory;                                     // This stores a reference to the inventory prefab copy.
     private HealthBar healthBar;                                    // This stores the refernce to the healthbar prefab copy.
     private Animation animation;                                    // Animation component reference.
+    private AudioComponent audio;                                   // Audio component class reference.
 
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
@@ -62,6 +63,11 @@ public class Player : Character {
 
             if ( shouldDissapear ) {
                 objectCollided.SetActive( false );
+
+                 // play collectible sound.
+                 if ( hitObject.collectableSound != null ) {
+                     audio.PlayClip( hitObject.collectableSound );
+                 }
             }
         }
 
@@ -179,6 +185,9 @@ public class Player : Character {
 
         // get animation component.
         animation = GetComponent<Animation>();
+
+        // get audio componenent class refernece.
+        audio = GetComponent<AudioComponent>();
     }
 
     /// <summary>

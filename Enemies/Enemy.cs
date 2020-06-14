@@ -9,6 +9,7 @@ public class Enemy : Character {
     public GameObject[] loot;                   // Loot to be dropped by the enemy.
     Coroutine damageCoroutine;                  // Reference to damage character coroutine.
     private Animation animation;                // Animation component reference.
+    private AudioComponent audio;               // Audio componen class reference.
 
     /// <summary>
     /// This function is called when the object becomes enabled and active.
@@ -18,6 +19,7 @@ public class Enemy : Character {
         ResetCharacter();
 
         animation = GetComponent<Animation>();
+        audio = GetComponent<AudioComponent>();
     }
 
     /// <summary>
@@ -33,9 +35,10 @@ public class Enemy : Character {
 
             this.hitPoints = hitPoints - damage;
 
-            // display damaged animation for enemy.
+            // display damaged animation / sound for enemy.
             if ( animation != null ) {
                 Utils.instance.TriggerAnimation( animation, "damagedEnemy" );
+                audio.PlaySound();
             }
 
             // push enemy away when hit by projectile.

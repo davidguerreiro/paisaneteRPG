@@ -9,6 +9,7 @@ public class Item : ScriptableObject {
     public Sprite sprite;                                       // Object base sprite.
     public int quantity;                                        // Amount of this items which is collected.
     public bool stackable;                                      // Wheter this item will be auto-consumed or saved in the inventory.
+    public AudioClip collectableSound;                          // Collectible sound reference - used when the item is collected.
     public enum ItemType {
         COIN,
         HEALTH,
