@@ -6,6 +6,7 @@ public class WorldAmmoBox : MonoBehaviour {
     public int amount;                                                  // Ammo given by this box.
     public float secondsForRecharge;                                    // How long until the box has ammo recharged for the player to pick up.
     public PlayerAmmo playerAmmo;                                       // Player ammo scriptable object.
+    public ParticleSystem particles;                                    // Particle system reference.
     private AudioComponent audio;                                       // Audio component script reference.
     private Coroutine recharging;                                       // Rechargin coroutine.
 
@@ -48,6 +49,10 @@ public class WorldAmmoBox : MonoBehaviour {
             // display sound.
             audio.PlaySound( 0 );
 
+            if ( particles.isPlaying ) {
+                particles.Stop();
+            }
+
             playerAmmo.value += amount;
 
             if ( playerAmmo.value > playerAmmo.maximun ) {
@@ -71,6 +76,10 @@ public class WorldAmmoBox : MonoBehaviour {
     public IEnumerator RechargeBox() {
         yield return new WaitForSecondsRealtime( this.secondsForRecharge );
         recharging = null;
+
+        if ( ! particles.isPlaying ) {
+            particles.Play();
+        }
     }
 
     /// <summary>
