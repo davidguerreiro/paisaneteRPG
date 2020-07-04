@@ -11,7 +11,6 @@ public class PlayerMovementController : MonoBehaviour {
     private Rigidbody2D rigidbody2D;                    // Rigibody 2D component reference.
     private Animator animator;                          // Animator class component reference.
     
-    private string animationState;                      // Animation state variable name.
     private string playerFacingDirection;               // Records which direction the player is facing.
 
     /// <summary>
@@ -21,15 +20,6 @@ public class PlayerMovementController : MonoBehaviour {
         if ( instance == null ) {
             instance = this;
         }
-    }
-
-    // values for animation variables machine states.
-    enum CharStates {
-        walkEast = 1,
-        walkSouth = 2,
-        walkWest = 3,
-        walkNorth = 4,
-        idleSouth = 5,
     }
 
     /// <summary>
@@ -83,35 +73,16 @@ public class PlayerMovementController : MonoBehaviour {
     /// </summary>
     private void UpdateAnimationState() {
 
-        // check for east movement animation.
-        if ( movement.x > 0 ) {
-            animator.SetInteger( this.animationState, (int) CharStates.walkEast );
-            this.playerFacingDirection = "right";
+        // check if player is moving. If so, then we transition to blend walking tree.
+        if ( Mathf.Approximately( movement.x, 0 ) && Mathf.Approximately( movement.y, 0 ) ) {
+            animator.SetBool( "isWalking", false );
+        } else {
+            animator.SetBool( "isWalking", true );
         }
 
-        // check for west movement animation.
-        else if ( movement.x < 0 ) {
-            animator.SetInteger( this.animationState, (int) CharStates.walkWest ); 
-            this.playerFacingDirection = "left";
-        }
-
-        // check for north movement animation.
-        else if ( movement.y > 0 ) {
-            animator.SetInteger( this.animationState, (int) CharStates.walkNorth );
-            this.playerFacingDirection = "top";
-        }
-
-        // check for south movement animation.
-        else if ( movement.y < 0 ) {
-            animator.SetInteger( this.animationState, (int) CharStates.walkSouth );
-            this.playerFacingDirection = "down";
-        }
-
-        // if none of the above, then display player idle animation for no-movement state.
-        else {
-            // TODO: Add idle animation for all directions here based in player facing direction.
-            animator.SetInteger( this.animationState, (int) CharStates.idleSouth );
-        }
+        // update animation movement parameterns values.
+        animator.SetFloat( "xDir", movement.x );
+        animator.SetFloat( "yDir", movement.y );
     }
 
     /// <summary>
@@ -145,9 +116,6 @@ public class PlayerMovementController : MonoBehaviour {
 
         // get animator component reference.
         animator = GetComponent<Animator>();
-
-        // set default value for animation state controller variable name;
-        this.animationState = "AnimationState";
 
         // set default value for movement control attributes.
         this.canMove = true;
