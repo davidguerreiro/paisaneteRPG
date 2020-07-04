@@ -25,6 +25,20 @@ public abstract class Character : MonoBehaviour {
     }
 
     /// <summary>
+    /// Display animation for character when is hurt.
+    /// </summary>
+    /// <returns>IEnumerator</returns>
+    public virtual IEnumerator FlickerCharacter() {
+
+        SpriteRenderer renderer = GetComponent<SpriteRenderer>();
+
+        renderer.color = Color.red;
+        yield return new WaitForSeconds( .1f );
+
+        renderer.color = Color.white;
+    }
+
+    /// <summary>
     /// Reset Character.
     /// </summary>
     public abstract void ResetCharacter();
