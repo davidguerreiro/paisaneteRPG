@@ -20,6 +20,16 @@ public class RPGGameManager : MonoBehaviour {
     }
 
     /// <summary>
+    /// Update is called every frame, if the MonoBehaviour is enabled.
+    /// </summary>
+    void Update() {
+        
+        if ( Input.GetKey( "escape" ) ) {
+            Application.Quit();
+        }
+    }
+
+    /// <summary>
     /// Init singleton instance and
     /// avoid duplications of this singleton
     /// class.
