@@ -22,7 +22,12 @@ public class Arc : MonoBehaviour {
         while ( percentComplete < 1.0f ) {
 
             percentComplete += Time.deltaTime / duration;
-            transform.position = Vector3.Lerp( startPosition, destination, percentComplete );
+
+            // makes the shoot to go as a as an arc instead of a straight line - explanation in book page 325.
+            var currentHeight = Mathf.Sin( Mathf.PI * percentComplete );
+
+            // transform.position = Vector3.Lerp( startPosition, destination, percentComplete );
+            transform.position = Vector3.Lerp( startPosition, destination, percentComplete ) + Vector3.up * currentHeight;
 
             yield return null;
         }
